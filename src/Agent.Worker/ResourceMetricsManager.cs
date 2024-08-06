@@ -355,8 +355,8 @@ namespace Microsoft.VisualStudio.Services.Agent.Worker
                     lock (_memoryInfoLock)
                     {
                         _memoryInfo.Updated = DateTime.Now;
-                        _memoryInfo.TotalMemoryMB = totalMemory / 1024;
-                        _memoryInfo.UsedMemoryMB = (totalMemory - freeMemory) / 1024;
+                        _memoryInfo.TotalMemoryMB = totalMemory / BYTES_PER_KIB;
+                        _memoryInfo.UsedMemoryMB = (totalMemory - freeMemory) / BYTES_PER_KIB;
                     }
                 }, linkedTokenSource.Token);
             }
