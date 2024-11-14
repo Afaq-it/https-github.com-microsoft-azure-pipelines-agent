@@ -313,10 +313,10 @@ namespace Microsoft.VisualStudio.Services.Agent.Worker.TestResults
             bool isTestRunOutcomeFailed = false;
 
             _telemetryProperties.Add("UsePublishTestResultsLib", _publishTestResultsLibFeatureState);
-            using (var connection = WorkerUtilities.GetVssConnection(_executionContext))
-            {
+            var connection = WorkerUtilities.GetVssConnection(_executionContext);
 
-                //This check is to determine to use "Microsoft.TeamFoundation.PublishTestResults" Library or the agent code to parse and publish the test results.
+            try
+            {
                 if (_publishTestResultsLibFeatureState)
                 {
                     var publisher = _executionContext.GetHostContext().GetService<ITestDataPublisher>();
@@ -350,6 +350,10 @@ namespace Microsoft.VisualStudio.Services.Agent.Worker.TestResults
                 {
                     TriggerCoverageMergeJob(_testResultFiles, _executionContext);
                 }
+            }
+            finally
+            {
+                connection?.Dispose();
             }
         }
 
